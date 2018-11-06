@@ -59,5 +59,10 @@ public class ExcelSheet {
 			return true;
 		}	
 	}
+
+	public List<ExcelRow> getRows() {
+		return rows;
+	}
+	
 	
 }

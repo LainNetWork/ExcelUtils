@@ -34,5 +34,10 @@ public class ExcelRow {
 	public long getCellNum() {
 		return cellNum;
 	}
+
+	@Override
+	public String toString() {
+		return "ExcelRow [lineNum=" + lineNum + ", cellNum=" + cellNum + ", cellList=" + cellList + "]";
+	}
 	
 }

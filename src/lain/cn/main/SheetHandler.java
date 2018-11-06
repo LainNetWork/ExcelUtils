@@ -17,8 +17,9 @@ public class SheetHandler {
 	private List<ErrorEnum> errorList;
 	
 	public SheetHandler(Sheet sheet) {
-		parse(sheet);
 		this.errorList = new ArrayList<>();
+		parse(sheet);
+		
 	}
 	
 	private void parse(Sheet sheet) {
@@ -42,7 +43,7 @@ public class SheetHandler {
 			}
 			titleRow.AddCell(row.getCell(i));
 		}		
-		if(titleRow.getCellList().size()!=titleRow.getLineNum()) {
+		if(titleRow.getCellList().size()!=titleRow.getCellNum()) {
 			return null;
 		}		
 		return titleRow;
@@ -62,6 +63,7 @@ public class SheetHandler {
 			} catch (ExcelTypeException e) {
 				ErrorEnum error = ErrorEnum.getErrorEnumByCode(Common.ERROR_ARGUMENT);
 				error.setRowNum(i);
+				error.setRow(e.getRow());
 				this.errorList.add(error);
 			}
 			
@@ -71,11 +73,26 @@ public class SheetHandler {
 	public ExcelSheet getSheet() {
 		return sheet;
 	}
+	
+	public List<List<String>> getSheetData(){
+		List<ExcelRow> rows = this.sheet.getRows();
+		List<List<String>> reList = new ArrayList<>();
+		for(ExcelRow row:rows) {
+			List<String> list = new ArrayList<>();
+			for(Cell cell:row.getCellList()) {
+				list.add(Common.titleTypeJudge(cell));			
+			}
+			reList.add(list);
+		}
+		return reList;
+		
+	} 
 
 
 	public List<ErrorEnum> getErrorList() {
 		return errorList;
 	}
+	
 	
 	
 }

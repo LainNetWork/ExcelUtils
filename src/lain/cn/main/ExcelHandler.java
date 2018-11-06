@@ -1,5 +1,8 @@
 package lain.cn.main;
 
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
 
@@ -8,18 +11,22 @@ import org.apache.poi.ss.usermodel.Sheet;
 import org.apache.poi.ss.usermodel.Workbook;
 import org.apache.poi.ss.usermodel.WorkbookFactory;
 
-import lain.cn.exception.ExcelLoadException;
 
 public class ExcelHandler {
 	private Workbook book;
 	
 	
 	public ExcelHandler(InputStream in) {
-		try {
-			book = WorkbookFactory.create(in);			
-		} catch (EncryptedDocumentException | IOException e) {
-			throw new ExcelLoadException();
-		}
+			try {
+				this.book = WorkbookFactory.create(in);
+			} catch (EncryptedDocumentException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			} catch (IOException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}			
+
 	}
 
 	
@@ -29,7 +36,18 @@ public class ExcelHandler {
 		return handler;
 	}
 	
-	
+	public static void main(String[] args) {
+		ExcelHandler handler;
+		try {
+			handler = new ExcelHandler(new FileInputStream(new File("D:/test.xlsx")));
+			SheetHandler SH =handler.getExcelSheetByName("员工工资表");
+			System.out.println(SH.getErrorList().get(0).getRow());
+		} catch (FileNotFoundException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
+	}
 	
 	
 }

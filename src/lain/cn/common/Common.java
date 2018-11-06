@@ -10,6 +10,9 @@ public class Common {
 	public static final int ERROR_ARGUMENT = 2;
 	
 	public static String titleTypeJudge(Cell cell) {
+		if(cell == null) {
+			return "";
+		}
 		switch (cell.getCellType()) {
 		case BLANK:
 			return "";
@@ -18,7 +21,7 @@ public class Common {
 		case ERROR:
 			return "";
 		case FORMULA:
-			return cell.getRichStringCellValue().toString();
+			return cell.getRichStringCellValue().toString().trim();
 		case NUMERIC:
 			if(HSSFDateUtil.isCellDateFormatted(cell)) {				
 				return new SimpleDateFormat("yyyy-MM-dd").format(cell.getDateCellValue());
@@ -26,7 +29,7 @@ public class Common {
 				return cell.getNumericCellValue()+"";
 			}
 		case STRING:
-			return cell.getStringCellValue();
+			return cell.getStringCellValue().trim();
 		case _NONE:
 			return "";
 		}
