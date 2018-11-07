@@ -14,8 +14,8 @@ public class TestExcel {
 	public void test() {
 		try {
 			ExcelHandler handler = new ExcelHandler(new FileInputStream("C:\\Users\\Administrator\\Desktop\\采购异常严重分析.xlsx"));
-			SheetHandler sheetHandler = handler.getExcelSheetByName("严重异常处理趋势");
-			System.out.println(sheetHandler.getErrorData());
+			SheetHandler sheetHandler = handler.getSheetHandlerByName("严重异常处理趋势");
+			System.out.println(sheetHandler.getSheetData());
 		} catch (FileNotFoundException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
