@@ -8,24 +8,23 @@ import org.apache.poi.ss.usermodel.Row;
 import org.apache.poi.ss.usermodel.Sheet;
 
 import lain.cn.common.Common;
-import lain.cn.error.ErrorEnum;
+import lain.cn.error.ErrorVO;
 import lain.cn.exception.ExcelHeadBlankException;
 import lain.cn.exception.ExcelTypeException;
 
 public class SheetHandler {
 	private ExcelSheet sheet;
-	private List<ErrorEnum> errorList;
+	private List<ErrorVO> errorList;
 	
 	public SheetHandler(Sheet sheet) {
 		this.errorList = new ArrayList<>();
 		parse(sheet);
-		
 	}
 	
 	private void parse(Sheet sheet) {
 		String sheetName = sheet.getSheetName();		
 		//获取表头，如果表头有空行，向上抛出异常
-		Row titleRow = sheet.getRow(0);
+		Row titleRow = sheet.getRow(sheet.getFirstRowNum());
 		ExcelRow excelTitleRow = getTitle(titleRow);
 		this.sheet = new ExcelSheet(excelTitleRow);
 		//获取数据
@@ -36,7 +35,7 @@ public class SheetHandler {
 	
 	private ExcelRow getTitle(Row row) {
 		ExcelRow titleRow = new ExcelRow();
-		for(int i =0;i<row.getLastCellNum();i++) {
+		for(int i =row.getFirstCellNum();i<row.getLastCellNum();i++) {
 			String title = Common.titleTypeJudge(row.getCell(i));
 			if("".equals(title)) {
 				throw new ExcelHeadBlankException("表头为空！");
@@ -52,10 +51,10 @@ public class SheetHandler {
 	private void getData(Sheet sheet) {
 		//读取数据行		
 		System.out.println(sheet.getLastRowNum());
-		for(int i =1;i<=sheet.getLastRowNum();i++) {
+		for(int i =sheet.getFirstRowNum()+1;i<=sheet.getLastRowNum();i++) {
 			Row row = sheet.getRow(i);
 			ExcelRow excelRow = new ExcelRow();
-			for(int c = 0;c<this.sheet.getTitle().getCellNum();c++) {
+			for(int c = row.getFirstCellNum();c<this.sheet.getTitle().getCellNum()+row.getFirstCellNum();c++) {
 				Cell cell = row.getCell(c);
 				excelRow.setLineNum(i);
 				excelRow.AddCell(cell);
@@ -63,7 +62,7 @@ public class SheetHandler {
 			try {
 				this.sheet.addRow(excelRow);
 			} catch (ExcelTypeException e) {
-				ErrorEnum error = new ErrorEnum(Common.ERROR_ARGUMENT, e.getMessage());
+				ErrorVO error = new ErrorVO(Common.ERROR_ARGUMENT, e.getMessage());
 				error.setRowNum(i);
 				error.setRow(e.getRow());
 				this.errorList.add(error);
@@ -89,9 +88,14 @@ public class SheetHandler {
 		return reList;
 		
 	} 
+	
+	public List<List<String>> getErrorData(){
+		this.getErrorList();
+		return null;
+	}
+	
 
-
-	public List<ErrorEnum> getErrorList() {
+	public List<ErrorVO> getErrorList() {
 		return errorList;
 	}
 	
