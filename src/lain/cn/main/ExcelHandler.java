@@ -39,9 +39,9 @@ public class ExcelHandler {
 	public static void main(String[] args) {
 		ExcelHandler handler;
 		try {
-			handler = new ExcelHandler(new FileInputStream(new File("D:/4.xls")));
-			SheetHandler SH =handler.getExcelSheetByName("国家信息表");
-			System.out.println(SH.getSheetData());
+			handler = new ExcelHandler(new FileInputStream(new File("C:\\Users\\Administrator\\Desktop\\采购异常严重分析.xlsx")));
+			SheetHandler SH =handler.getExcelSheetByName("严重异常处理趋势");
+			System.out.println(SH.getErrorList().get(3).getRow());
 		} catch (FileNotFoundException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();

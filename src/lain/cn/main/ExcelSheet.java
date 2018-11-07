@@ -60,7 +60,7 @@ public class ExcelSheet {
 					flag = false;
 					throw new ExcelTypeException("类型不匹配！", row);
 				};
-			}			
+			}
 			return flag;
 		}else {
 			return true;

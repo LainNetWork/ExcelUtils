@@ -57,12 +57,13 @@ public class SheetHandler {
 			ExcelRow excelRow = new ExcelRow();
 			for(int c = 0;c<this.sheet.getTitle().getCellNum();c++) {
 				Cell cell = row.getCell(c);
+				excelRow.setLineNum(i);
 				excelRow.AddCell(cell);
 			}
 			try {
 				this.sheet.addRow(excelRow);
 			} catch (ExcelTypeException e) {
-				ErrorEnum error = ErrorEnum.getErrorEnumByCode(Common.ERROR_ARGUMENT);
+				ErrorEnum error = new ErrorEnum(Common.ERROR_ARGUMENT, e.getMessage());
 				error.setRowNum(i);
 				error.setRow(e.getRow());
 				this.errorList.add(error);
