@@ -1,4 +1,4 @@
-package lain.cn.main;
+package lain.cn.excel.main;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -7,10 +7,10 @@ import org.apache.poi.ss.usermodel.Cell;
 import org.apache.poi.ss.usermodel.Row;
 import org.apache.poi.ss.usermodel.Sheet;
 
-import lain.cn.common.Common;
-import lain.cn.error.ErrorVO;
-import lain.cn.exception.ExcelHeadBlankException;
-import lain.cn.exception.ExcelTypeException;
+import lain.cn.excel.common.Common;
+import lain.cn.excel.error.ErrorVO;
+import lain.cn.excel.exception.ExcelHeadBlankException;
+import lain.cn.excel.exception.ExcelTypeException;
 
 public class SheetHandler {
 	private ExcelSheet sheet;
@@ -79,19 +79,21 @@ public class SheetHandler {
 		List<ExcelRow> rows = this.sheet.getRows();
 		List<List<String>> reList = new ArrayList<>();
 		for(ExcelRow row:rows) {
-			List<String> list = new ArrayList<>();
-			for(Cell cell:row.getCellList()) {
-				list.add(Common.titleTypeJudge(cell));			
-			}
-			reList.add(list);
+			reList.add(row.getRowData());
 		}
 		return reList;
 		
 	} 
 	
+	
+	
 	public List<List<String>> getErrorData(){
-		this.getErrorList();
-		return null;
+		List<List<String>> reList = new ArrayList<>();
+		for(ErrorVO vo:this.getErrorList()) {
+			ExcelRow row= vo.getRow();
+			reList.add(row.getRowData());
+		}
+		return reList;
 	}
 	
 

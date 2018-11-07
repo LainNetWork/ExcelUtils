@@ -1,4 +1,4 @@
-package lain.cn.exception;
+package lain.cn.excel.exception;
 
 public class ExcelLoadException extends RuntimeException{
 	private static final long serialVersionUID = 4509639862218558146L;

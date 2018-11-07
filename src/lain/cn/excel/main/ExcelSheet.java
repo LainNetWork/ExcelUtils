@@ -1,11 +1,13 @@
-package lain.cn.main;
+package lain.cn.excel.main;
 
 import java.util.ArrayList;
 import java.util.List;
 
 import org.apache.poi.ss.usermodel.Cell;
 
-import lain.cn.exception.ExcelTypeException;
+import lain.cn.excel.exception.ExcelTypeException;
+
+
 
 public class ExcelSheet {
 	private String sheetName;

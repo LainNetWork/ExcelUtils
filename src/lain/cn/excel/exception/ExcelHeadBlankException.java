@@ -1,4 +1,4 @@
-package lain.cn.exception;
+package lain.cn.excel.exception;
 
 public class ExcelHeadBlankException extends RuntimeException{
 

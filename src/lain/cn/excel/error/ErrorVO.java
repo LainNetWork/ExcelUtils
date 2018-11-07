@@ -1,6 +1,6 @@
-package lain.cn.error;
+package lain.cn.excel.error;
 
-import lain.cn.main.ExcelRow;
+import lain.cn.excel.main.ExcelRow;
 
 public class ErrorVO {
 	private int code;

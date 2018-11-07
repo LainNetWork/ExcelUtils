@@ -1,8 +1,12 @@
-package lain.cn.main;
+package lain.cn.excel.main;
 
 import java.util.ArrayList;
+import java.util.List;
 
 import org.apache.poi.ss.usermodel.Cell;
+
+import lain.cn.excel.common.Common;
+
 
 public class ExcelRow {
 	private int lineNum;//行号
@@ -34,7 +38,14 @@ public class ExcelRow {
 	public long getCellNum() {
 		return cellNum;
 	}
-
+	
+	public List<String> getRowData(){
+		List<String> list = new ArrayList<>();
+		for(Cell cell:this.getCellList()) {
+			list.add(Common.titleTypeJudge(cell));			
+		}
+		return list;
+	}
 	@Override
 	public String toString() {
 		return "ExcelRow [lineNum=" + lineNum + ", cellNum=" + cellNum + ", cellList=" + cellList + "]";

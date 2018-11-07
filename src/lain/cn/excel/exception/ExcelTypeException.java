@@ -1,6 +1,6 @@
-package lain.cn.exception;
+package lain.cn.excel.exception;
 
-import lain.cn.main.ExcelRow;
+import lain.cn.excel.main.ExcelRow;
 
 public class ExcelTypeException extends RuntimeException{
 	private static final long serialVersionUID = 1L;
