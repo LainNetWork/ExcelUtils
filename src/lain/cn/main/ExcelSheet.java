@@ -33,6 +33,10 @@ public class ExcelSheet {
 		return sheetName;
 	}
 
+	public ExcelRow getTitle() {
+		return title;
+	}
+
 	public void setSheetName(String sheetName) {
 		this.sheetName = sheetName;
 	}
@@ -49,6 +53,9 @@ public class ExcelSheet {
 			for(int i = 0;i<head.getCellList().size();i++) {
 				Cell cell = row.getCellList().get(i);
 				Cell hCell = head.getCellList().get(i);
+				if(cell == null) {
+					continue;
+				}
 				if(!cell.getCellType().equals(hCell.getCellType())) {
 					flag = false;
 					throw new ExcelTypeException("类型不匹配！", row);

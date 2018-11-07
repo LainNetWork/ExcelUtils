@@ -51,10 +51,11 @@ public class SheetHandler {
 	
 	private void getData(Sheet sheet) {
 		//读取数据行		
+		System.out.println(sheet.getLastRowNum());
 		for(int i =1;i<=sheet.getLastRowNum();i++) {
 			Row row = sheet.getRow(i);
 			ExcelRow excelRow = new ExcelRow();
-			for(int c = 0;c<row.getLastCellNum();c++) {
+			for(int c = 0;c<this.sheet.getTitle().getCellNum();c++) {
 				Cell cell = row.getCell(c);
 				excelRow.AddCell(cell);
 			}
