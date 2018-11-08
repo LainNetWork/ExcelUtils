@@ -30,6 +30,7 @@ public class ExcelHandler {
 	 */
 	public SheetHandler getSheetHandlerByName(String sheetName) {
 		Sheet sheet = this.book.getSheet(sheetName);
+		//TODO 要判断名字是否存在
 		SheetHandler handler = new SheetHandler(sheet);		
 		return handler;
 	}

@@ -1,6 +1,7 @@
 package lain.cn.excel.main;
 
 import java.util.ArrayList;
+
 import java.util.List;
 
 import org.apache.poi.ss.usermodel.Cell;
@@ -17,7 +18,8 @@ public class SheetHandler {
 	private List<ErrorVO> errorList;
 	private int startRow;//记录行开始位置
 	private int startCol;//记录列开始位置
-
+	private TypeHandler typeHandler;
+	
 	
 	public SheetHandler(Sheet sheet) {
 		this.errorList = new ArrayList<>();
@@ -28,6 +30,7 @@ public class SheetHandler {
 		String sheetName = sheet.getSheetName();		
 		//获取表头，如果表头有空行，向上抛出异常		
 		ExcelRow excelTitleRow = getTitle(sheet);
+		this.typeHandler = new TypeHandler(excelTitleRow);
 		this.sheet = new ExcelSheet(excelTitleRow);
 		//获取数据
 		getData(sheet);
@@ -36,7 +39,7 @@ public class SheetHandler {
 	}
 	
 	private ExcelRow getTitle(Sheet sheet) {
-		for(int i = sheet.getFirstRowNum();i<sheet.getLastRowNum();i++) {
+		for(int i = sheet.getFirstRowNum();i<=sheet.getLastRowNum();i++) {
 			Row row = sheet.getRow(i);
 			if(!ifRowEmpty(row)) {
 				this.setStartRow(i);
@@ -44,7 +47,6 @@ public class SheetHandler {
 			}
 		}
 		return null;
-		
 	}
 	
 	private boolean ifRowEmpty(Row row) {
@@ -74,23 +76,42 @@ public class SheetHandler {
 					continue;//无视
 				}
 			}
-			if("".equals(title)) {
-				throw new ExcelHeadBlankException("表头为空！");
-			}
 			titleRow.AddCell(row.getCell(i));
 		}		
 		if(titleRow.getCellList().size()!=titleRow.getCellNum()) {
 			return null;
 		}		
 		this.setStartCol(flag);
+		//去除尾部空行，判断中间是否有空
+		emptyTitleHandle(titleRow);
 		return titleRow;
+	}
+	
+	private void emptyTitleHandle(ExcelRow titleRow) {
+		List<Cell> cellList =titleRow.getCellList();
+		for(int i =cellList.size()-1;i>=0;i--){
+			Cell cell = cellList.get(i);
+			String title = Common.titleTypeJudge(cell);
+			if("".equals(title)) {
+				titleRow.setCellNum(titleRow.getCellNum()-1);
+				cellList.remove(i);
+			}else {//一旦有不为空的，立刻跳出循环
+				break;
+			}
+		}
+		//判断是否包含空表头
+		for(Cell cell :cellList) {
+			String title = Common.titleTypeJudge(cell);
+			if("".equals(title)) {
+				throw new ExcelHeadBlankException("表头包含空单元格！");
+			}
+		}	
 	}
 	
 	private void getData(Sheet sheet) {
 		//读取数据行		
 		for(int i =this.getStartRow()+1;i<=sheet.getLastRowNum();i++) {
-			Row row = sheet.getRow(i);
-			
+			Row row = sheet.getRow(i);			
 			if(ifRowEmpty(row)) {
 				continue;
 			}
@@ -100,16 +121,22 @@ public class SheetHandler {
 				excelRow.setLineNum(i);
 				excelRow.AddCell(cell);
 			}
-			try {
-				this.sheet.addRow(excelRow);
-			} catch (ExcelTypeException e) {
-				ErrorVO error = new ErrorVO(Common.ERROR_ARGUMENT, e.getMessage());
-				error.setRowNum(i);
-				error.setRow(e.getRow());
-				this.errorList.add(error);
+			this.typeHandler.vote(excelRow);//统计类型
+			this.sheet.addRow(excelRow);
+		}
+		//过滤错误类型
+		try {
+			this.typeHandler.erroTypeFilter(this.sheet);
+		} catch (ExcelTypeException e) {
+			for(ExcelRow row :e.getRow()) {
+				ErrorVO vo =new ErrorVO(Common.ERROR_ARGUMENT, "类型不匹配!");
+				vo.setRow(row);
+				this.errorList.add(vo);
 			}
 			
 		}
+		
+		
 	}
 
 	public ExcelSheet getSheet() {
@@ -119,15 +146,20 @@ public class SheetHandler {
 	public List<List<String>> getSheetData(){
 		List<ExcelRow> rows = this.sheet.getRows();
 		List<List<String>> reList = new ArrayList<>();
-		for(ExcelRow row:rows) {
+		for(ExcelRow row:rows) {			
 			reList.add(row.getRowData());
 		}
 		return reList;	
 	} 
 	
+	
+	public List<String> getTypes(){
+		return this.typeHandler.getResult();
+	}
+
 	public List<String> getTitleData(){
 		
-		return null;		
+		return this.sheet.getTitle().getRowData();		
 		
 	}
 	
@@ -149,7 +181,7 @@ public class SheetHandler {
 		return startRow;
 	}
 
-	public void setStartRow(int startRow) {
+	private void setStartRow(int startRow) {
 		this.startRow = startRow;
 	}
 
@@ -157,7 +189,7 @@ public class SheetHandler {
 		return startCol;
 	}
 
-	public void setStartCol(int startCol) {
+	private void setStartCol(int startCol) {
 		this.startCol = startCol;
 	}
 	

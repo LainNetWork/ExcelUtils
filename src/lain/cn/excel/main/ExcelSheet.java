@@ -3,10 +3,7 @@ package lain.cn.excel.main;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.apache.poi.ss.usermodel.Cell;
-
-import lain.cn.excel.exception.ExcelTypeException;
-
+import lain.cn.excel.exception.ExcelLoadException;
 
 
 public class ExcelSheet {
@@ -19,16 +16,12 @@ public class ExcelSheet {
 		this.rows = new ArrayList<ExcelRow>();
 	}
 	
-	public boolean addRow(ExcelRow row) {
+	public void addRow(ExcelRow row) {
 		if(row.getCellNum()!=title.getCellNum()) {
-			return false;
+			throw new ExcelLoadException("行数不匹配!");
 		}else {
-			//row 类型校验，以第一行数据为标准
-			if(typeJudge(row)) {
-				this.rows.add(row);
-			}			
+			this.rows.add(row);
 		}
-		return true;		
 	}
 	
 	public String getSheetName() {
@@ -43,36 +36,9 @@ public class ExcelSheet {
 		this.sheetName = sheetName;
 	}
 	
-	/**
-	 * 类型校验，
-	 * @param row
-	 * @return
-	 */
-	private boolean typeJudge(ExcelRow row) {
-		if(rows.size()>=1) {	
-			ExcelRow head = rows.get(0);
-			boolean flag = true;
-			for(int i = 0;i<head.getCellList().size();i++) {
-				Cell cell = row.getCellList().get(i);
-				Cell hCell = head.getCellList().get(i);
-				if(cell == null) {
-					continue;
-				}
-				if(!cell.getCellType().equals(hCell.getCellType())) {
-					flag = false;
-					throw new ExcelTypeException("类型不匹配！", row);
-				};
-			}
-			return flag;
-		}else {
-			return true;
-		}
-	}
-
 	public List<ExcelRow> getRows() {
 		return rows;
 	}
-
 
 	
 }

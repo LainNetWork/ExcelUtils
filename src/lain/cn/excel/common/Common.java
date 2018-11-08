@@ -24,7 +24,7 @@ public class Common {
 			return cell.getRichStringCellValue().toString().trim();
 		case NUMERIC:
 			if(HSSFDateUtil.isCellDateFormatted(cell)) {				
-				return new SimpleDateFormat("yyyy-MM-dd").format(cell.getDateCellValue());
+				return new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(cell.getDateCellValue());
 			}else {
 				return cell.getNumericCellValue()+"";
 			}

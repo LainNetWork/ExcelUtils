@@ -18,8 +18,16 @@ public class ExcelRow {
 		this.cellList = new ArrayList<>();
 	}
 		
+	public void setCellNum(int cellNum) {
+		this.cellNum = cellNum;
+	}
+
 	public int getLineNum() {
 		return lineNum;
+	}
+
+	public void setCellList(ArrayList<Cell> cellList) {
+		this.cellList = cellList;
 	}
 
 	public void setLineNum(int lineNum) {
@@ -35,7 +43,7 @@ public class ExcelRow {
 		return cellList;
 	}
 
-	public long getCellNum() {
+	public int getCellNum() {
 		return cellNum;
 	}
 	
