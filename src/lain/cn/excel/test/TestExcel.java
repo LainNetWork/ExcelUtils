@@ -17,7 +17,8 @@ public class TestExcel {
 	public void test() {
 		try {
 			ExcelHandler handler = new ExcelHandler(new FileInputStream("D:/Lain.xlsx"));
-			SheetHandler sheetHandler = handler.getSheetHandlerByName("员工工资表");
+			System.out.println(handler.getSheetNames());
+			SheetHandler sheetHandler = handler.getSheetHandlerByName("test");
 			System.out.println(sheetHandler.getErrorData());
 			System.out.println(sheetHandler.getTypes());
 			System.out.println(sheetHandler.getSheetData());
@@ -29,7 +30,6 @@ public class TestExcel {
 	public void test2() {
 		try {
 			Date fa = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").parse("-66-22 88:66:7");
-
 			System.out.println(new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(fa));
 		} catch (ParseException e) {
 			e.printStackTrace();
