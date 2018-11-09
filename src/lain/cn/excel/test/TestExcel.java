@@ -22,7 +22,6 @@ public class TestExcel {
 			System.out.println(sheetHandler.getTypes());
 			System.out.println(sheetHandler.getSheetData());
 		} catch (FileNotFoundException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 	}
