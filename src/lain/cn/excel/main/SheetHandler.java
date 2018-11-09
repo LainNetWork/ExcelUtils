@@ -46,7 +46,7 @@ public class SheetHandler {
 				return titleHandle(row);
 			}
 		}
-		return null;
+		return new ExcelRow();
 	}
 	
 	private boolean ifRowEmpty(Row row) {
